@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K.Dev — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0c0c0e;
+    --surface: #141416;
+    --surface2: #1c1c20;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e6e0;
+    --muted: #7a7870;
+    --accent: #c8f53e;
+    --accent2: #3ef5c8;
+    --kotlin: #7F52FF;
+    --mono: 'Space Mono', monospace;
+    --serif: 'Crimson Pro', Georgia, serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(12,12,14,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(127,82,255,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,245,62,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 780px; }
+  .hero-tag {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-tag::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--accent2); }
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 300; line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 1.5rem; color: var(--text);
+  }
+  .hero-name em { font-style: italic; color: var(--accent); }
+  .hero-desc {
+    font-family: var(--serif);
+    font-size: 1.2rem; font-weight: 300;
+    color: var(--muted); max-width: 520px;
+    margin-bottom: 2.5rem; line-height: 1.8;
+  }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 0.75rem 1.5rem; font-family: var(--mono);
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; border: none; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: #0c0c0e; font-weight: 700; }
+  .btn-primary:hover { background: #d4ff55; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--muted); border: 0.5px solid var(--border2); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 3rem;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); display: flex; align-items: center; gap: 10px;
+  }
+  .hero-scroll::after { content: ''; display: block; width: 40px; height: 1px; background: var(--border2); }
+  section { padding: 5rem 3rem; }
+  .section-label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label span { color: var(--accent); margin-right: 4px; }
+  .section-label::after { content: ''; flex: 1; max-width: 60px; height: 0.5px; background: var(--border2); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 900px; }
+  .about-text { font-family: var(--serif); font-size: 1.1rem; font-weight: 300; color: var(--muted); line-height: 1.9; }
+  .about-text strong { color: var(--text); font-weight: 400; }
+  .skills-list { display: flex; flex-direction: column; gap: 1rem; }
+  .skill-row { display: flex; align-items: center; gap: 12px; }
+  .skill-name { font-size: 12px; color: var(--muted); width: 140px; flex-shrink: 0; }
+  .skill-bar-bg { flex: 1; height: 2px; background: var(--surface2); position: relative; overflow: hidden; }
+  .skill-bar-fill { height: 100%; background: var(--accent); transform-origin: left; transition: transform 1s cubic-bezier(0.16,1,0.3,1); }
+  .skill-bar-fill.kotlin { background: var(--kotlin); }
+  .skill-bar-fill.accent2 { background: var(--accent2); }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px; background: var(--border); border: 0.5px solid var(--border);
+  }
+  .project-card {
+    background: var(--bg); padding: 2rem;
+    transition: background 0.2s; position: relative; overflow: hidden;
+  }
+  .project-card:hover { background: var(--surface); }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: transparent; transition: background 0.2s;
+  }
+  .project-card:hover::before { background: var(--accent); }
+  .project-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--kotlin); margin-bottom: 0.75rem; }
+  .project-tag.web { color: var(--accent2); }
+  .project-tag.data { color: var(--accent); }
+  .project-name { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.01em; }
+  .project-desc { font-family: var(--serif); font-size: 1rem; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tech-pill { font-size: 10px; padding: 3px 8px; border: 0.5px solid var(--border2); color: var(--muted); letter-spacing: 0.08em; }
+  .contact-inner { max-width: 640px; }
+  .contact-title { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; line-height: 1.1; margin-bottom: 1.5rem; color: var(--text); }
+  .contact-title em { font-style: italic; color: var(--accent); }
+  .contact-sub { font-family: var(--serif); font-size: 1.1rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.8; }
+  .contact-links { display: flex; flex-direction: column; gap: 0; border: 0.5px solid var(--border2); max-width: 400px; }
+  .contact-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.25rem; text-decoration: none; color: var(--muted);
+    border-bottom: 0.5px solid var(--border);
+    transition: all 0.2s; font-size: 12px; letter-spacing: 0.08em;
+  }
+  .contact-link:last-child { border-bottom: none; }
+  .contact-link:hover { background: var(--surface); color: var(--text); padding-left: 1.75rem; }
+  .contact-link span { color: var(--accent); }
+  footer {
+    padding: 2rem 3rem; border-top: 0.5px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--muted); font-size: 11px; letter-spacing: 0.1em;
+  }
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1rem; }
+    section, .hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">K.DEV</div>
+  <ul class="nav-links">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-tag">Desarrollador de software</p>
+    <h1 class="hero-name">
+      Código limpio,<br>
+      soluciones <em>reales.</em>
+    </h1>
+    <p class="hero-desc">
+      Especializado en desarrollo multiplataforma con Kotlin. Construyo aplicaciones que resuelven problemas concretos, desde cero hasta producción.
+    </p>
+    <div class="hero-cta">
+      <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
+      <a href="#contacto" class="btn btn-ghost">Contactar</a>
+    </div>
+  </div>
+  <p class="hero-scroll">scroll</p>
+</section>
+
+<section id="sobre-mi">
+  <p class="section-label"><span>//</span> sobre mí</p>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <p>
+        Técnico Superior en <strong>Desarrollo de Aplicaciones Multiplataforma</strong>, con foco en Kotlin y el ecosistema JetBrains. Me apasiona construir software que funcione bien y sea mantenible.
+      </p>
+      <br>
+      <p>
+        Aprendo construyendo: cada proyecto que desarrollo es un reto real donde aplico lo aprendido y descubro lo que aún tengo que mejorar. Así es como crezco.
+      </p>
+    </div>
+    <div class="skills-list fade-in">
+      <div class="skill-row">
+        <span class="skill-name">Kotlin / KMP</span>
+        <div class="skill-bar-bg"><div class="skill-bar-fill kotlin" data-width="0.85"></div></div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Compose</span>
+        <div class="skill-bar-bg"><div class="skill-bar-fill kotlin" data-width="0.80"></div></div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">IntelliJ / Android Studio</span>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="0.88"></div></div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">HTML / CSS / JS</span>
+        <div class="skill-bar-bg"><div class="skill-bar-fill accent2" data-width="0.70"></div></div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">SQL / Bases de datos</span>
+        <div class="skill-bar-bg"><div class="skill-bar-fill accent2" data-width="0.65"></div></div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Git / GitHub</span>
+        <div class="skill-bar-bg"><div class="skill-bar-fill" data-width="0.75"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proyectos">
+  <p class="section-label"><span>//</span> proyectos</p>
+  <div class="projects-grid">
+    <div class="project-card fade-in">
+      <p class="project-tag">Kotlin Multiplatform · Compose</p>
+<p style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#c8f53e;margin-bottom:1rem;">⬤ En desarrollo · Previsto para finales de 2026</p>
+      <h3 class="project-name">Proyecto DAM — App Multiplataforma</h3>
+      <p class="project-desc">Aplicación de escritorio y móvil desarrollada con Kotlin Multiplatform y Compose. Lógica de negocio compartida entre plataformas con UI nativa en cada una.</p>
+       <div class="project-tech">
+        <span class="tech-pill">Kotlin</span>
+        <span class="tech-pill">KMP</span>
+        <span class="tech-pill">Compose</span>
+        <span class="tech-pill">IntelliJ</span>
+      </div>
+    </div>
+    <div class="project-card fade-in">
+      <p class="project-tag" style="color: var(--accent);">Kotlin · Escritorio</p>
+<p style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#c8f53e;margin-bottom:1rem;">⬤ En desarrollo · Previsto para finales de 2026</p>
+      <h3 class="project-name">CRM Personal</h3>
+      <p class="project-desc">Gestor de relaciones con clientes desarrollado desde cero. Gestión de contactos, seguimiento de interacciones y panel de actividad con persistencia local.</p>
+       <div class="project-tech">
+        <span class="tech-pill">Kotlin</span>
+        <span class="tech-pill">SQLite</span>
+        <span class="tech-pill">Compose Desktop</span>
+      </div>
+    </div>
+    <div class="project-card fade-in">
+      <p class="project-tag web">HTML · CSS · JavaScript</p>
+      <h3 class="project-name">Tienda Online con Pedidos</h3>
+      <p class="project-desc">Web de comercio electrónico con catálogo de productos, carrito de compra y sistema de pedidos integrado con WhatsApp. Diseño responsive y funcional.</p>
+      <div class="project-tech">
+        <span class="tech-pill">HTML</span>
+        <span class="tech-pill">CSS</span>
+        <span class="tech-pill">JavaScript</span>
+        <span class="tech-pill">WhatsApp API</span>
+      </div>
+    </div>
+    <div class="project-card fade-in">
+      <p class="project-tag">Kotlin · Escritorio</p>
+      <h3 class="project-name">Gestión de Biblioteca</h3>
+      <p class="project-desc">Sistema de gestión de fondos bibliotecarios. Inventario de libros, préstamos, devoluciones y búsqueda avanzada con interfaz de escritorio.</p>
+      <div class="project-tech">
+        <span class="tech-pill">Kotlin</span>
+        <span class="tech-pill">SQL</span>
+        <span class="tech-pill">Compose</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto">
+  <p class="section-label"><span>//</span> contacto</p>
+  <div class="contact-inner">
+    <h2 class="contact-title">¿Trabajamos<br><em>juntos?</em></h2>
+    <p class="contact-sub">
+      Busco mi primera oportunidad profesional en desarrollo de software. Disponible para proyectos, prácticas o posición junior.
+    </p>
+    <div class="contact-links">
+      <!-- CAMBIA AQUÍ TU EMAIL -->
+      <a href="mailto:vallemar81@gmail.com" class="contact-link">
+        vallemar81@gmail.com
+        <span>→</span>
+      </a>
+      <!-- CAMBIA AQUÍ TU GITHUB -->
+      <a href="https://github.com/MdVdiag" class="contact-link" target="_blank">
+        github.com/MdVdiag
+        <span>→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>K.DEV · 2026</span>
+  <span>Construido con HTML · CSS · JS</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+          const bars = entry.target.querySelectorAll('.skill-bar-fill');
+          bars.forEach(bar => {
+            bar.style.transform = `scaleX(${bar.dataset.width})`;
+          });
+        }, 80 * i);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
